@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Administration | Réservations</title>
+    <link rel="stylesheet" href="./assets/css/style.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="index.html" class="logo">Événement</a>
+            <ul>
+                <li><a href="index.html">Accueil</a></li>
+                <li><a href="programme.html">Programme</a></li>
+                <li><a href="billets.html">Billets</a></li>
+                <li><a href="apropos.html">À Propos</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="admin.html">Admin</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <h1>Liste des réservations</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Email</th>
+                    <th>Événement</th>
+                </tr>
+            </thead>
+            <tbody id="reservations-list"></tbody>
+        </table>
+    </main>
+    <script src="./assets/js/events.js"></script>
+    <script>
+    // Récupère les réservations et les événements
+    document.addEventListener('DOMContentLoaded', function() {
+        const reservations = JSON.parse(localStorage.getItem('reservations') || '[]');
+        const tbody = document.getElementById('reservations-list');
+        if (reservations.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="3">Aucune réservation</td></tr>';
+            return;
+        }
+        reservations.forEach(res => {
+            // EVENTS est défini dans events.js
+            const event = (typeof EVENTS !== "undefined" && EVENTS.find(e => e.id === res.eventId)) || { titre: "Inconnu" };
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${res.nom}</td>
+                <td>${res.email}</td>
+                <td>${event.titre}</td>
+            `;
+            tbody.appendChild(tr);
+        });
+    });
+    </script>
+</body>
+</html>
